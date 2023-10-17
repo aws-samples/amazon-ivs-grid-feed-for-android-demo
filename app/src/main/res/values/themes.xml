@@ -1,0 +1,38 @@
+<resources>
+    <style name="Base.Theme.GridFeed" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
+        <item name="colorOnPrimary">@color/colorAccent</item>
+        <item name="colorSecondary">@color/colorPrimary</item>
+        <item name="colorSecondaryVariant">@color/colorPrimaryDark</item>
+        <item name="colorOnSecondary">@color/colorAccent</item>
+        <item name="android:statusBarColor">@color/background</item>
+        <item name="android:windowBackground">@color/background</item>
+        <item name="android:navigationBarColor">@color/background</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+    </style>
+
+    <style name="Theme.GridFeed" parent="Base.Theme.GridFeed" />
+
+    <style name="SliderStyle.ThemeOverlay">
+        <item name="colorPrimary">@color/orange</item>
+        <item name="colorOnPrimary">@color/gray_light</item>
+        <item name="colorSurface">@color/gray_light</item>
+    </style>
+
+    <style name="SliderStyle" parent="Widget.MaterialComponents.Slider">
+        <item name="thumbElevation">0dp</item>
+        <item name="thumbRadius">8dp</item>
+        <item name="tickVisible">false</item>
+        <item name="trackHeight">7dp</item>
+        <item name="labelBehavior">gone</item>
+        <item name="materialThemeOverlay">@style/SliderStyle.ThemeOverlay</item>
+    </style>
+
+    <style name="SpinnerTheme" parent="Widget.AppCompat.Spinner">
+        <item name="backgroundTint">@color/black</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+</resources>

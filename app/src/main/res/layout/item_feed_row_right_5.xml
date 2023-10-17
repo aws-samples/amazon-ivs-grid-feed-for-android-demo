@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="250dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <FrameLayout
+        android:id="@+id/image_1_item"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/image_2_item"
+        app:layout_constraintBottom_toTopOf="@id/image_3_item">
+
+        <TextureView
+            android:id="@+id/video_1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ImageView
+            android:id="@+id/image_1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:contentDescription="@null" />
+
+        <View
+            android:id="@+id/image_1_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_button_square_mask" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_item_border" />
+
+        <ImageView
+            android:id="@+id/image_1_video"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_video"
+            android:elevation="5dp"
+            android:layout_margin="6dp"
+            android:layout_gravity="end"
+            android:contentDescription="@null" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/image_2_item"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/image_1_item"
+        app:layout_constraintBottom_toTopOf="@id/image_4_item"
+        app:layout_constraintEnd_toStartOf="@id/image_5_item">
+
+        <TextureView
+            android:id="@+id/video_2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ImageView
+            android:id="@+id/image_2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:contentDescription="@null" />
+
+        <View
+            android:id="@+id/image_2_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_button_square_mask" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_item_border" />
+
+        <ImageView
+            android:id="@+id/image_2_video"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_video"
+            android:elevation="5dp"
+            android:layout_margin="6dp"
+            android:layout_gravity="end"
+            android:contentDescription="@null" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/image_3_item"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/image_1_item"
+        app:layout_constraintEnd_toStartOf="@id/image_4_item">
+
+        <TextureView
+            android:id="@+id/video_3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ImageView
+            android:id="@+id/image_3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:contentDescription="@null" />
+
+        <View
+            android:id="@+id/image_3_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_button_square_mask" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_item_border" />
+
+        <ImageView
+            android:id="@+id/image_3_video"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_video"
+            android:elevation="5dp"
+            android:layout_margin="6dp"
+            android:layout_gravity="end"
+            android:contentDescription="@null" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/image_4_item"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toEndOf="@id/image_3_item"
+        app:layout_constraintTop_toBottomOf="@id/image_2_item"
+        app:layout_constraintEnd_toStartOf="@id/image_5_item"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextureView
+            android:id="@+id/video_4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ImageView
+            android:id="@+id/image_4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:contentDescription="@null" />
+
+        <View
+            android:id="@+id/image_4_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_button_square_mask" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_item_border" />
+
+        <ImageView
+            android:id="@+id/image_4_video"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_video"
+            android:elevation="5dp"
+            android:layout_margin="6dp"
+            android:layout_gravity="end"
+            android:contentDescription="@null" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/image_5_item"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toEndOf="@id/image_2_item"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextureView
+            android:id="@+id/video_5"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ImageView
+            android:id="@+id/image_5"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:contentDescription="@null" />
+
+        <View
+            android:id="@+id/image_5_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_button_square_mask" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_item_border" />
+
+        <ImageView
+            android:id="@+id/image_5_video"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_video"
+            android:elevation="5dp"
+            android:layout_margin="6dp"
+            android:layout_gravity="end"
+            android:contentDescription="@null" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/row_index"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:background="@color/black_light"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:fontFamily="sans-serif-medium"
+        android:padding="16dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

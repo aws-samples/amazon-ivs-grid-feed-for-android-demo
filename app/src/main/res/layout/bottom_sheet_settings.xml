@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/bg_square_white_dark_rounded"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:layout_gravity="bottom">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/settings"
+        android:gravity="center_horizontal"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginBottom="32dp"
+        android:fontFamily="sans-serif-medium"/>
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/enable_logs_switch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:fontFamily="sans-serif-medium"
+        android:layout_marginStart="7dp"
+        android:layout_marginBottom="6dp"
+        android:background="@null"
+        app:trackTint="@color/track_color"
+        app:thumbTint="@color/orange"
+        android:text="@string/enable_logs" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="7dp"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/thumbnail_quality"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:fontFamily="sans-serif-medium" />
+
+        <Spinner
+            android:id="@+id/thumbnail_quality"
+            style="@style/SpinnerTheme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:entries="@array/qualities" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="7dp"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/fullscreen_quality"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:fontFamily="sans-serif-medium"/>
+
+        <Spinner
+            android:id="@+id/fullscreen_quality"
+            style="@style/SpinnerTheme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:entries="@array/qualities" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/preloaded_video_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/preloaded_video_count"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:layout_marginStart="7dp"
+        android:fontFamily="sans-serif-medium"/>
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/preloaded_video_count"
+        style="@style/SliderStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:stepSize="1"
+        android:value="1"
+        android:valueFrom="0"
+        android:valueTo="10" />
+
+    <TextView
+        android:id="@+id/playing_video_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/playing_video_count"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:layout_marginStart="7dp"
+        android:fontFamily="sans-serif-medium"/>
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/playing_video_count"
+        style="@style/SliderStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stepSize="1"
+        android:value="1"
+        android:valueFrom="0"
+        android:valueTo="10" />
+
+    <TextView
+        android:id="@+id/close_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_button_square_mask_rounded"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:text="@string/close" />
+
+</LinearLayout>

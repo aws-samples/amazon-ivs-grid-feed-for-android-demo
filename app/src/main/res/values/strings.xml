@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Grid Feed</string>
+    <string name="settings">Settings</string>
+    <string name="playing_video_count">Playing video count: %1$s</string>
+    <string name="preloaded_video_count">Preloaded video count: %1$s</string>
+    <string name="close">Close</string>
+    <string name="fullscreen_quality">Fullscreen quality</string>
+    <string name="thumbnail_quality">Thumbnail quality</string>
+    <string name="enable_logs">Enable logs</string>
+    <string-array name="qualities">
+        <item>Auto</item>
+        <item>160p</item>
+        <item>360p</item>
+        <item>480p</item>
+        <item>720p</item>
+        <item>1080p</item>
+    </string-array>
+</resources>

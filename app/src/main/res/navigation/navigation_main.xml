@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_main"
+    app:startDestination="@id/navigation_grid">
+
+    <fragment
+        android:id="@+id/navigation_grid"
+        android:name="com.amazon.ivs.gridfeed.ui.feed.GridFeedFragment"
+        tools:layout="@layout/fragment_grid_feed">
+        <action
+            android:id="@+id/to_settings"
+            app:destination="@id/navigation_settings" />
+        <action
+            android:id="@+id/to_full_screen"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:destination="@id/navigation_full_screen" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/navigation_settings"
+        android:name="com.amazon.ivs.gridfeed.ui.feed.GridFeedSettingsFragment"
+        tools:layout="@layout/bottom_sheet_settings" />
+
+    <fragment
+        android:id="@+id/navigation_full_screen"
+        android:name="com.amazon.ivs.gridfeed.ui.feed.GridFeedFullScreenFragment"
+        tools:layout="@layout/fragment_full_screen" />
+
+</navigation>
