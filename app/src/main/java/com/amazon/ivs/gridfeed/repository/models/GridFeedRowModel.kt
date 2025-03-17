@@ -13,7 +13,7 @@ enum class RowType(val value: Int) {
     LEFT_3(3);
 
     companion object {
-        fun getRowType(value: Int) = values().find { it.value == value } ?: RIGHT_5
+        fun getRowType(value: Int) = entries.find { it.value == value } ?: RIGHT_5
     }
 }
 
