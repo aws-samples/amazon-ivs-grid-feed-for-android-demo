@@ -1,9 +1,7 @@
 package com.amazon.ivs.gridfeed.di
 
 import android.content.Context
-import com.amazon.ivs.gridfeed.repository.GridFeedRepository
-import com.amazon.ivs.gridfeed.repository.GridFeedRepositoryImpl
-import com.amazon.ivs.gridfeed.repository.appSettingsStore
+import com.amazon.ivs.gridfeed.repository.PreferenceProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,9 +14,5 @@ import javax.inject.Singleton
 object StageModule {
     @Provides
     @Singleton
-    fun provideAppSettingsStore(@ApplicationContext context: Context) = context.appSettingsStore
-
-    @Provides
-    @Singleton
-    fun provideStageRepository(repository: GridFeedRepositoryImpl): GridFeedRepository = repository
+    fun providePreferenceProvider(@ApplicationContext context: Context) = PreferenceProvider(context)
 }

@@ -1,7 +1,6 @@
 package com.amazon.ivs.gridfeed.repository
 
 import android.content.Context
-import androidx.datastore.core.DataStore
 import com.amazon.ivs.gridfeed.common.LOAD_MORE_DELTA
 import com.amazon.ivs.gridfeed.common.addPlayerOrCopy
 import com.amazon.ivs.gridfeed.common.asGridRows
@@ -12,37 +11,25 @@ import com.amazon.ivs.gridfeed.common.loadMore
 import com.amazon.ivs.gridfeed.repository.models.AUTO_QUALITY
 import com.amazon.ivs.gridfeed.repository.models.GridFeedItemModel
 import com.amazon.ivs.gridfeed.repository.models.GridFeedPlayer
-import com.amazon.ivs.gridfeed.repository.models.GridFeedSettings
-import com.amazon.ivs.gridfeed.ui.feed.ScrollDirection
 import com.amazon.ivs.gridfeed.repository.models.GridFeedRowModel
+import com.amazon.ivs.gridfeed.repository.models.GridFeedSettings
 import com.amazon.ivs.gridfeed.repository.models.GridFeedVideoCounter
 import com.amazon.ivs.gridfeed.repository.models.GridScrollState
+import com.amazon.ivs.gridfeed.ui.feed.ScrollDirection
 import com.amazonaws.ivs.player.MediaPlayer
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
-interface GridFeedRepository {
-    val feed: StateFlow<List<GridFeedRowModel>>
-    fun setFullScreenItem(id: Int)
-    fun removeFullScreenItem()
-    fun onFeedScrolled(scrollState: GridScrollState)
-    fun maybeLoadMore(rowId: Int)
-    fun reloadFeed()
-}
-
 @Singleton
-class GridFeedRepositoryImpl @Inject constructor(
+class GridFeedRepository @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val appSettingsStore: DataStore<GridFeedSettings>
-) : GridFeedRepository {
+    private val preferenceProvider: PreferenceProvider
+) {
     private val initialFeedItems = demoItems.loadMore().mapIndexed { index, item ->
         item.copy(id = index)
     }
@@ -50,7 +37,10 @@ class GridFeedRepositoryImpl @Inject constructor(
     private val playerPool = mutableListOf<GridFeedPlayer>()
 
     private val _feed = MutableStateFlow<List<GridFeedRowModel>>(emptyList())
-    override val feed = _feed.asStateFlow()
+    val feed = _feed.asStateFlow()
+
+    private val _settings = MutableStateFlow(GridFeedSettings())
+    val settings = _settings.asStateFlow()
 
     private var maxPreloadedVideos = 1f
     private var maxPlayingVideos = 1f
@@ -59,23 +49,14 @@ class GridFeedRepositoryImpl @Inject constructor(
 
     init {
         launchMain {
-            appSettingsStore.data.collectLatest { settings ->
-                updateSettings(settings) {
-                    playerPool.forEach { it.dispose() }
-                    playerPool.clear()
-                    playerPool.addAll((0 until maxPreloadedVideos.toInt()).map { createPlayer() })
-                }
-            }
-        }
-        launchMain {
-            appSettingsStore.data.first().let { settings ->
-                updateSettings(settings)
+            preferenceProvider.settings?.asObject<GridFeedSettings>()?.let { settings ->
+                updateGridFeedSettings(settings)
             }
             reloadFeed(initialFeedItems)
         }
     }
 
-    override fun onFeedScrolled(scrollState: GridScrollState) {
+    fun onFeedScrolled(scrollState: GridScrollState) {
         val items = currentFeedItems
         // Find items to load
         val firstRowId = scrollState.firstRowId
@@ -181,7 +162,7 @@ class GridFeedRepositoryImpl @Inject constructor(
         _feed.update { mappedItems.asGridRows() }
     }
 
-    override fun setFullScreenItem(id: Int) {
+    fun setFullScreenItem(id: Int) {
         Timber.d("Set fullscreen item: $id")
         currentFeedItems = currentFeedItems.map { item ->
             if (item.id == id) {
@@ -204,7 +185,7 @@ class GridFeedRepositoryImpl @Inject constructor(
         _feed.update { currentFeedItems.asGridRows() }
     }
 
-    override fun removeFullScreenItem() {
+    fun removeFullScreenItem() {
         currentFeedItems = currentFeedItems.map { item ->
             if (item.isFullScreen) {
                 Timber.d("Remove fullscreen item and maybe dispose: ${item.gridFeedPlayer?.shouldDispose}")
@@ -222,13 +203,13 @@ class GridFeedRepositoryImpl @Inject constructor(
         _feed.update { currentFeedItems.asGridRows() }
     }
 
-    override fun reloadFeed() {
+    fun reloadFeed() {
         Timber.d("Reloading feed")
         currentFeedItems.forEach { it.dispose() }
         reloadFeed(initialFeedItems.map { it.copy(isFullScreen = false) })
     }
 
-    override fun maybeLoadMore(rowId: Int) {
+    fun maybeLoadMore(rowId: Int) {
         val lastRowId = _feed.value.last().id
         val delta = lastRowId - rowId
         // Load more items if we are close to the last row in list
@@ -238,7 +219,62 @@ class GridFeedRepositoryImpl @Inject constructor(
         }
     }
 
-    private fun updateSettings(settings: GridFeedSettings, onUpdated: () -> Unit = {}) {
+    fun onThumbnailQualityChanged(value: String, onUpdated: () -> Unit) {
+        if (_settings.value.thumbnailQuality == value) return
+        Timber.d("On thumbnail quality changed: $value")
+        val settings = _settings.value.copy(thumbnailQuality = value)
+
+        updateGridFeedSettings(
+            settings = settings,
+            onUpdated = onUpdated
+        )
+    }
+
+    fun onFullscreenQualityChanged(value: String, onUpdated: () -> Unit) {
+        if (_settings.value.fullscreenQuality == value) return
+        Timber.d("On fullscreen quality changed: $value")
+        val settings = _settings.value.copy(fullscreenQuality = value)
+
+        updateGridFeedSettings(
+            settings = settings,
+            onUpdated = onUpdated
+        )
+    }
+
+    fun onLogsEnabled(enabled: Boolean) {
+        if (_settings.value.logsEnabled == enabled) return
+        Timber.d("On logs enabled changed: $enabled")
+        val settings = _settings.value.copy(logsEnabled = enabled)
+
+        updateGridFeedSettings(settings = settings)
+    }
+
+    fun onPreloadedVideoCountChanged(count: Float, onUpdated: () -> Unit) {
+        if (_settings.value.preloadedVideoCount == count) return
+        Timber.d("On preloaded video count changed: $count")
+        val settings = _settings.value.copy(preloadedVideoCount = count)
+
+        updateGridFeedSettings(
+            settings = settings,
+            onUpdated = onUpdated
+        )
+    }
+
+    fun onPlayingVideoCountChanged(count: Float, onUpdated: () -> Unit) {
+        if (_settings.value.playingVideoCount == count) return
+        Timber.d("On playing video count changed: $count")
+        val settings = _settings.value.copy(playingVideoCount = count)
+
+        updateGridFeedSettings(
+            settings = settings,
+            onUpdated = onUpdated
+        )
+    }
+
+    private fun updateGridFeedSettings(
+        settings: GridFeedSettings,
+        onUpdated: () -> Unit = {}
+    ) {
         val updated = maxPreloadedVideos != settings.preloadedVideoCount ||
                 maxPlayingVideos != settings.playingVideoCount ||
                 thumbnailQuality != settings.thumbnailQuality ||
@@ -247,7 +283,16 @@ class GridFeedRepositoryImpl @Inject constructor(
         maxPlayingVideos = settings.playingVideoCount
         thumbnailQuality = settings.thumbnailQuality
         fullscreenQuality = settings.fullscreenQuality
+
+        preferenceProvider.settings = settings.toJson()
+        _settings.update { settings }
+
+        Timber.d("Settings updated: $updated, $settings")
         if (updated) {
+            playerPool.forEach { it.dispose() }
+            playerPool.clear()
+            playerPool.addAll((0 until maxPreloadedVideos.toInt()).map { createPlayer() })
+
             onUpdated()
         }
     }
@@ -277,7 +322,7 @@ class GridFeedRepositoryImpl @Inject constructor(
     }
 
     private fun createPlayer(): GridFeedPlayer {
-        val player = MediaPlayer(context)
+        val player = MediaPlayer.Builder(context).build()
         val gridFeedPlayer = GridFeedPlayer(player)
         gridFeedPlayer.init()
         gridFeedPlayer.onPlaying = { id, isPlaying ->

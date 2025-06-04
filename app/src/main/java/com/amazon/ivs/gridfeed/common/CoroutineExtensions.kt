@@ -1,9 +1,18 @@
 package com.amazon.ivs.gridfeed.common
 
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 private val ioScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
@@ -46,9 +55,3 @@ fun <T> Fragment.collectLatestWithLifecycle(
         flow.collectLatest(collectLatest)
     }
 }
-
-fun <T> Flow<T>.asStateFlow(
-    coroutineScope: CoroutineScope,
-    initialValue: T,
-    sharingStarted: SharingStarted = SharingStarted.WhileSubscribed(5000),
-) = stateIn(coroutineScope, sharingStarted, initialValue)

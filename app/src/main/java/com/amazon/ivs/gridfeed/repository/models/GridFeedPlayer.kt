@@ -1,8 +1,8 @@
 package com.amazon.ivs.gridfeed.repository.models
 
-import android.net.Uri
 import android.util.Size
 import android.view.Surface
+import androidx.core.net.toUri
 import com.amazon.ivs.gridfeed.common.addListener
 import com.amazonaws.ivs.player.MediaPlayer
 import com.amazonaws.ivs.player.Player
@@ -44,7 +44,7 @@ data class GridFeedPlayer(
         Timber.d("Loading player: $id, $play, $quality, $itemId")
         itemId = id
         videoUrl = url
-        player.load(Uri.parse(url))
+        player.load(url.toUri())
         if (quality != null) {
             player.qualities.firstOrNull { it.name == quality }?.let { foundQuality ->
                 player.setAutoQualityMode(false, false)

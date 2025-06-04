@@ -12,6 +12,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Spinner
 import androidx.core.view.doOnLayout
+import androidx.core.view.isVisible
 import com.amazon.ivs.gridfeed.R
 import com.amazon.ivs.gridfeed.repository.models.GridFeedItemModel
 import com.bumptech.glide.Glide
@@ -89,7 +90,7 @@ fun Spinner.onSelectionChanged(callback: (Int) -> Unit) {
 }
 
 private fun View.fadeIn() {
-    if (visibility == View.VISIBLE || tag == TAG_FADE_IN) return
+    if (isVisible || tag == TAG_FADE_IN) return
     Timber.d("FADE IN: $visibility, $alpha, $tag, $id")
     clearAnimation()
     visibility = View.VISIBLE

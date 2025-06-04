@@ -1,13 +1,9 @@
 package com.amazon.ivs.gridfeed.ui.feed
 
-import androidx.datastore.core.DataStore
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.amazon.ivs.gridfeed.common.asStateFlow
 import com.amazon.ivs.gridfeed.common.launch
 import com.amazon.ivs.gridfeed.common.launchIO
 import com.amazon.ivs.gridfeed.repository.GridFeedRepository
-import com.amazon.ivs.gridfeed.repository.models.GridFeedSettings
 import com.amazon.ivs.gridfeed.repository.models.GridScrollState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -23,7 +19,6 @@ enum class ScrollDirection { UP, DOWN }
 @HiltViewModel
 class GridFeedViewModel @Inject constructor(
     private val repository: GridFeedRepository,
-    private val appSettingsStore: DataStore<GridFeedSettings>
 ) : ViewModel() {
     private var settingsUpdated = false
     private val _onGoFullScreen = Channel<Unit>()
@@ -32,8 +27,8 @@ class GridFeedViewModel @Inject constructor(
     private var scrollDirection = ScrollDirection.DOWN
 
     val feed = repository.feed
+    val settings = repository.settings
     val onGoFullScreen = _onGoFullScreen.receiveAsFlow()
-    val settings = appSettingsStore.data.asStateFlow(viewModelScope, GridFeedSettings())
     val onSettingsUpdated = _onSettingsUpdated.receiveAsFlow()
 
     fun onFeedScrolled(firstRowId: Int, lastRowId: Int) = launchIO {
@@ -59,18 +54,18 @@ class GridFeedViewModel @Inject constructor(
         repository.removeFullScreenItem()
     }
 
-    fun onPreloadedVideoCountChanged(count: Float) = launch {
-        if (settings.value.preloadedVideoCount == count) return@launch
-        Timber.d("On preloaded video count changed: $count")
-        appSettingsStore.updateData { it.copy(preloadedVideoCount = count) }
-        settingsUpdated = true
+    fun onPreloadedVideoCountChanged(count: Float) {
+        repository.onPreloadedVideoCountChanged(
+            count = count,
+            onUpdated = { settingsUpdated = true }
+        )
     }
 
-    fun onPlayingVideoCountChanged(count: Float) = launch {
-        if (settings.value.playingVideoCount == count) return@launch
-        Timber.d("On playing video count changed: $count")
-        appSettingsStore.updateData { it.copy(playingVideoCount = count) }
-        settingsUpdated = true
+    fun onPlayingVideoCountChanged(count: Float) {
+        repository.onPlayingVideoCountChanged(
+            count = count,
+            onUpdated = { settingsUpdated = true }
+        )
     }
 
     fun onSettingsClosed() {
@@ -86,20 +81,21 @@ class GridFeedViewModel @Inject constructor(
         repository.reloadFeed()
     }
 
-    fun onThumbnailQualityChanged(value: String) = launch {
-        if (settings.value.thumbnailQuality == value) return@launch
-        appSettingsStore.updateData { it.copy(thumbnailQuality = value) }
-        settingsUpdated = true
+    fun onThumbnailQualityChanged(value: String) {
+        repository.onThumbnailQualityChanged(
+            value = value,
+            onUpdated = { settingsUpdated = true }
+        )
     }
 
-    fun onFullscreenQualityChanged(value: String) = launch {
-        if (settings.value.fullscreenQuality == value) return@launch
-        appSettingsStore.updateData { it.copy(fullscreenQuality = value) }
-        settingsUpdated = true
+    fun onFullscreenQualityChanged(value: String) {
+        repository.onFullscreenQualityChanged(
+            value = value,
+            onUpdated = { settingsUpdated = true }
+        )
     }
 
-    fun onLogsEnabled(enabled: Boolean) = launch {
-        if (settings.value.logsEnabled == enabled) return@launch
-        appSettingsStore.updateData { it.copy(logsEnabled = enabled) }
+    fun onLogsEnabled(enabled: Boolean) {
+        repository.onLogsEnabled(enabled = enabled)
     }
 }
