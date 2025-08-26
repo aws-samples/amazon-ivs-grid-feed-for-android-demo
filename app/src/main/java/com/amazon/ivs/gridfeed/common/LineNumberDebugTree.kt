@@ -3,6 +3,7 @@ package com.amazon.ivs.gridfeed.common
 import timber.log.Timber
 
 private const val TIMBER_TAG = "Grid_Feed"
+
 class LineNumberDebugTree : Timber.DebugTree() {
     private var method = ""
 
